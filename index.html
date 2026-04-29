@@ -3,20 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Order App / Commande Rapide</title>
+<title>Doga's Order</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f0f0f;
-    --surface: #1a1a1a;
-    --surface2: #222;
-    --border: #2e2e2e;
-    --accent: #FFD000;
-    --accent2: #f0c200;
-    --text: #f0f0f0;
-    --muted: #888;
-    --warn: #ff6b35;
+    --bg: #faf9f6;
+    --surface: #ffffff;
+    --surface2: #f5f3ee;
+    --border: #e8e4dc;
+    --accent: #F5C518;
+    --accent2: #e0b310;
+    --red: #D42B2B;
+    --text: #1a1a1a;
+    --muted: #999;
+    --warn: #D42B2B;
     --radius: 12px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  [data-theme="dark"] {
+    --bg: #111111;
+    --surface: #1c1c1c;
+    --surface2: #252525;
+    --border: #333;
+    --text: #f0f0f0;
+    --muted: #777;
+    --shadow: none;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,7 +43,7 @@
 
   header {
     background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 3px solid var(--accent);
     padding: 16px 20px;
     position: sticky;
     top: 0;
@@ -46,13 +58,13 @@
     font-family: 'Syne', sans-serif;
     font-weight: 800;
     font-size: 1.1rem;
-    color: var(--accent);
+    color: var(--red);
     letter-spacing: -0.5px;
   }
 
   .logo span {
     color: var(--text);
-    opacity: 0.5;
+    opacity: 0.4;
     font-weight: 700;
   }
 
@@ -79,7 +91,7 @@
 
   .lang-btn.active {
     background: var(--accent);
-    color: #000;
+    color: #111;
   }
 
   .header-right {
@@ -90,7 +102,7 @@
 
   .cart-count {
     background: var(--accent);
-    color: #000;
+    color: #111;
     font-weight: 700;
     font-family: 'DM Mono', monospace;
     font-size: 0.75rem;
@@ -151,7 +163,7 @@
 
   .cat-pill.active {
     background: var(--accent);
-    color: #000;
+    color: #111;
     border-color: var(--accent);
   }
 
@@ -207,6 +219,10 @@
 
   .product-card.has-qty {
     border-color: var(--accent);
+    background: #fffbea;
+  }
+
+  [data-theme="dark"] .product-card.has-qty {
     background: #1f1a00;
   }
 
@@ -255,7 +271,7 @@
 
   .qty-btn:hover {
     background: var(--accent);
-    color: #000;
+    color: #111;
     border-color: var(--accent);
   }
 
@@ -283,7 +299,7 @@
     width: 20px;
     height: 20px;
     background: var(--accent);
-    color: #000;
+    color: #111;
     font-family: 'DM Mono', monospace;
     font-size: 0.65rem;
     font-weight: 700;
@@ -325,7 +341,7 @@
     align-items: center;
     gap: 8px;
     background: var(--accent);
-    color: #000;
+    color: #111;
     font-family: 'Syne', sans-serif;
     font-weight: 700;
     font-size: 0.9rem;
@@ -441,7 +457,7 @@
     justify-content: center;
     gap: 8px;
     background: var(--accent);
-    color: #000;
+    color: #111;
     font-family: 'Syne', sans-serif;
     font-weight: 700;
     font-size: 0.95rem;
@@ -474,15 +490,35 @@
     display: none;
   }
 
+
+  .theme-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 34px;
+    height: 34px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .theme-btn:hover {
+    border-color: var(--accent);
+  }
+
   .hidden { display: none !important; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Order<span>App</span></div>
+  <div class="logo">Doga's<span> Order</span></div>
   <div class="header-right">
     <div class="cart-count" id="cartCount">0</div>
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀️</button>
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('fr')">FR</button>
       <button class="lang-btn" onclick="setLang('en')">EN</button>
@@ -868,6 +904,13 @@ function closeModal(e) {
 }
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+
 render();
 </script>
 </body>
