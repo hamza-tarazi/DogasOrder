@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order App / Commande Rapide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222;
+    --border: #2e2e2e;
+    --accent: #FFD000;
+    --accent2: #f0c200;
+    --text: #f0f0f0;
+    --muted: #888;
+    --warn: #ff6b35;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 120px;
+  }
+
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  .logo span {
+    color: var(--text);
+    opacity: 0.5;
+    font-weight: 700;
+  }
+
+  .lang-toggle {
+    display: flex;
+    background: var(--surface2);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .lang-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'DM Mono', monospace;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .lang-btn.active {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cart-count {
+    background: var(--accent);
+    color: #000;
+    font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    min-width: 36px;
+    text-align: center;
+  }
+
+  .search-wrap {
+    padding: 14px 20px 0;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus {
+    border-color: var(--accent);
+  }
+
+  .search-input::placeholder {
+    color: var(--muted);
+  }
+
+  .category-nav {
+    display: flex;
+    gap: 8px;
+    padding: 14px 20px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .category-nav::-webkit-scrollbar { display: none; }
+
+  .cat-pill {
+    white-space: nowrap;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .cat-pill.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  .section {
+    padding: 0 20px 20px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    padding: 18px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .section-icon {
+    font-size: 1rem;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  @media (min-width: 500px) {
+    .product-grid { grid-template-columns: 1fr 1fr 1fr; }
+  }
+
+  .product-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    transition: border-color 0.2s, transform 0.15s;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .product-card.has-qty {
+    border-color: var(--accent);
+    background: #1f1a00;
+  }
+
+  .product-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .product-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .qty-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .qty-btn:hover {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  .qty-input {
+    width: 36px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+  }
+
+  /* Remove arrows from number input */
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .qty-input[type=number] { -moz-appearance: textfield; }
+
+  .qty-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    z-index: 100;
+  }
+
+  .order-summary {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .order-summary strong {
+    color: var(--accent);
+    font-size: 1rem;
+  }
+
+  .send-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .send-btn:hover {
+    background: var(--accent2);
+    transform: translateY(-1px);
+  }
+
+  .send-btn:disabled {
+    background: var(--border);
+    color: var(--muted);
+    transform: none;
+    cursor: not-allowed;
+  }
+
+  .wa-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .reset-btn {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px;
+    width: 100%;
+    max-width: 540px;
+    border-top: 1px solid var(--border);
+    animation: slideUp 0.25s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+
+  .modal-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .order-preview {
+    background: var(--surface2);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    line-height: 1.8;
+    color: var(--text);
+    max-height: 220px;
+    overflow-y: auto;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+    white-space: pre-wrap;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .wa-send-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: none;
+    padding: 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .wa-send-btn:hover { background: var(--accent2); }
+
+  .cancel-btn {
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    display: none;
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Order<span>App</span></div>
+  <div class="header-right">
+    <div class="cart-count" id="cartCount">0</div>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<div class="search-wrap">
+  <input class="search-input" type="text" id="searchInput" placeholder="Rechercher un produit… / Search product…" oninput="filterProducts()">
+</div>
+
+<div class="category-nav" id="catNav"></div>
+
+<div id="productList"></div>
+
+<div class="empty-state" id="emptyState">
+  <div style="font-size:2rem;margin-bottom:8px">🔍</div>
+  <span id="emptyText">Aucun produit trouvé / No product found</span>
+</div>
+
+<div class="bottom-bar">
+  <div class="order-summary">
+    <span id="summaryLabel">Items:</span> <strong id="totalItems">0</strong>
+  </div>
+  <button class="reset-btn" onclick="resetAll()" id="resetBtn">
+    <span id="resetLabel">Reset</span>
+  </button>
+  <button class="send-btn" onclick="openModal()" id="sendBtn" disabled>
+    <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.1 1.522 5.836L0 24l6.336-1.501A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.805 9.805 0 01-5.006-1.371l-.359-.214-3.723.882.939-3.618-.233-.372A9.795 9.795 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/>
+    </svg>
+    <span id="sendLabel">Envoyer / Send</span>
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modalTitle">📋 Votre commande / Your order</div>
+    <div class="modal-sub" id="modalSub">WhatsApp va s'ouvrir avec votre commande pré-remplie.<br>WhatsApp will open with your order pre-filled.</div>
+    <div class="order-preview" id="orderPreview"></div>
+    <div class="modal-actions">
+      <button class="cancel-btn" onclick="document.getElementById('modalOverlay').classList.remove('open')" id="cancelBtn">Annuler / Cancel</button>
+      <a class="wa-send-btn" id="waLink" href="#" target="_blank">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.1 1.522 5.836L0 24l6.336-1.501A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.805 9.805 0 01-5.006-1.371l-.359-.214-3.723.882.939-3.618-.233-.372A9.795 9.795 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/>
+        </svg>
+        <span id="openWaLabel">Ouvrir WhatsApp</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const categories = [
+  {
+    id: 'fresh', icon: '🥬',
+    label: { fr: 'Frais & Légumes', en: 'Fresh & Veg' },
+    products: [
+      { id: 'p1', name: 'Salade Iceberg' },
+      { id: 'p2', name: 'Tomate Cagette' },
+      { id: 'p3', name: 'Oignon Jaune 25kg' },
+      { id: 'p4', name: 'Yogurt Nature 5kg' },
+      { id: 'p5', name: 'Lait ×6' },
+      { id: 'p6', name: 'Oeufs ×30' },
+      { id: 'p7', name: 'Crème Légère Président ×6' },
+    ]
+  },
+  {
+    id: 'meat', icon: '🍗',
+    label: { fr: 'Viandes & Volailles', en: 'Meat & Poultry' },
+    products: [
+      { id: 'm1', name: 'Filet de Poulet 30kg' },
+      { id: 'm2', name: 'Filet de Poulet 20kg' },
+      { id: 'm3', name: 'Aile de Poulet 30kg' },
+      { id: 'm4', name: 'Poulet Entier Carton' },
+      { id: 'm5', name: 'Bacon de Boeuf' },
+      { id: 'm6', name: 'Steak 45g' },
+      { id: 'm7', name: 'Steak 90g' },
+      { id: 'm8', name: 'Steak 150g' },
+      { id: 'm9', name: 'Biggy Burger 10kg' },
+      { id: 'm10', name: 'Chicken Burger Steak 1kg' },
+      { id: 'm11', name: 'Sachet Filet Poulet Tender Burgers' },
+    ]
+  },
+  {
+    id: 'dairy', icon: '🧀',
+    label: { fr: 'Fromagerie & Beurre', en: 'Dairy & Cheese' },
+    products: [
+      { id: 'd1', name: 'Dairy Maid Slice Fromage Carton' },
+      { id: 'd2', name: 'La Bonne Vache Carton' },
+      { id: 'd3', name: 'Emmental Râpé' },
+      { id: 'd4', name: 'Fromage Chèvre' },
+      { id: 'd5', name: 'Gold Butter Mix' },
+      { id: 'd6', name: 'Beurre de Laiterie' },
+    ]
+  },
+  {
+    id: 'frites', icon: '🍟',
+    label: { fr: 'Frites & Féculents', en: 'Fries & Starches' },
+    products: [
+      { id: 'f1', name: 'My Frite 6/6' },
+      { id: 'f2', name: 'Potatoes Wedges Sac' },
+      { id: 'f3', name: 'Rösti Round Sac' },
+      { id: 'f4', name: 'Onion Rings Sac' },
+      { id: 'f5', name: 'Mozza Sticks Sac' },
+      { id: 'f6', name: 'Heer Riz 20kg' },
+    ]
+  },
+  {
+    id: 'boulangerie', icon: '🍞',
+    label: { fr: 'Boulangerie & Farines', en: 'Bakery & Flour' },
+    products: [
+      { id: 'b1', name: 'Pain Black Toast Brioche Multigrain' },
+      { id: 'b2', name: 'Pain Black Toast Brioche Nature' },
+      { id: 'b3', name: 'Pain Americano 100g' },
+      { id: 'b4', name: 'Antalya Flour Tortillas' },
+      { id: 'b5', name: 'Farine Juliette 20kg' },
+      { id: 'b6', name: 'Farine Juliette 10kg' },
+      { id: 'b7', name: 'Base Breading 11kg' },
+      { id: 'b8', name: 'Chicken Breading Salé' },
+      { id: 'b9', name: 'Baking Powder' },
+      { id: 'b10', name: 'Poudre d\'Amandes' },
+      { id: 'b11', name: 'Poudre Noix de Coco' },
+    ]
+  },
+  {
+    id: 'sauces', icon: '🧴',
+    label: { fr: 'Sauces & Condiments', en: 'Sauces & Condiments' },
+    products: [
+      { id: 's1', name: 'Ketchup Dosette Sticks' },
+      { id: 's2', name: 'Ketchup Sauce 5kg' },
+      { id: 's3', name: 'Seau Ketchup 10kg' },
+      { id: 's4', name: 'Mayonnaise Dosette Sticks' },
+      { id: 's5', name: 'Tartare Sauce Bidon' },
+      { id: 's6', name: 'Moutarde Sauce' },
+      { id: 's7', name: 'Moutarde Miel Sauce' },
+      { id: 's8', name: 'Sauce Barbecue Dosette' },
+      { id: 's9', name: 'Samurai Sauce Dosette Sticks' },
+      { id: 's10', name: 'Seau Samurai 10kg' },
+      { id: 's11', name: 'Algérienne Sauce Dosette Sticks' },
+      { id: 's12', name: 'Sauce Blanche 10kg' },
+      { id: 's13', name: 'Sauce Verte' },
+      { id: 's14', name: 'Biggy Dosette' },
+      { id: 's15', name: 'Vinegar Liquid Carton' },
+    ]
+  },
+  {
+    id: 'huiles', icon: '🛢️',
+    label: { fr: 'Huiles & Épices', en: 'Oils & Spices' },
+    products: [
+      { id: 'h1', name: 'Bingoil Huile Tournesol 10L' },
+      { id: 'h2', name: 'Huile AVR60 Rape Seed Oil' },
+      { id: 'h3', name: 'Jeera Powder (Indien)' },
+      { id: 'h4', name: 'Poudre Paprika' },
+      { id: 'h5', name: 'Sel Fin de Table 10kg' },
+      { id: 'h6', name: 'Biryani Paste' },
+    ]
+  },
+  {
+    id: 'frozen', icon: '🧊',
+    label: { fr: 'Surgelés & Snacks', en: 'Frozen & Snacks' },
+    products: [
+      { id: 'fr1', name: 'Samosa Légumes' },
+      { id: 'fr2', name: 'Samosa Poulet' },
+    ]
+  },
+  {
+    id: 'desserts', icon: '🍮',
+    label: { fr: 'Desserts', en: 'Desserts' },
+    products: [
+      { id: 'des1', name: 'Tiramisu Choco Caramel' },
+      { id: 'des2', name: 'Tiramisu Caramel Spéculoos' },
+      { id: 'des3', name: 'Tiramisu Pistache' },
+      { id: 'des4', name: 'Tiramisu Bueno' },
+      { id: 'des5', name: 'Pot Fast Milkshake 400ml' },
+    ]
+  },
+  {
+    id: 'boissons', icon: '🥤',
+    label: { fr: 'Boissons', en: 'Drinks' },
+    products: [
+      { id: 'boi1', name: 'Cristaline Eau 50cl' },
+      { id: 'boi2', name: 'Cristaline Pêche 50cl' },
+      { id: 'boi3', name: 'Cristaline Fraise 50cl' },
+      { id: 'boi4', name: 'Cristaline Citron 50cl' },
+      { id: 'boi5', name: 'Coca Normal Europ 33cl' },
+      { id: 'boi6', name: 'Coca Zero 33cl' },
+      { id: 'boi7', name: 'Coca Cherry 33cl' },
+      { id: 'boi8', name: 'Coca Normal 1.5L' },
+      { id: 'boi9', name: 'Fanta Orange 33cl' },
+      { id: 'boi10', name: 'Fanta Citron 33cl' },
+      { id: 'boi11', name: 'Schweppes Pomme 33cl' },
+      { id: 'boi12', name: 'Oasis Tropical 33cl' },
+      { id: 'boi13', name: 'Lipton Ice Tea 33cl' },
+      { id: 'boi14', name: 'Lipton Ice Tea 1.5L' },
+      { id: 'boi15', name: '7up Citron 33cl' },
+      { id: 'boi16', name: '7up Citron 1.5L' },
+      { id: 'boi17', name: 'Tropico 33cl' },
+      { id: 'boi18', name: 'Tropico 1.5L' },
+      { id: 'boi19', name: 'Perrier 33cl' },
+    ]
+  },
+  {
+    id: 'emballage', icon: '📦',
+    label: { fr: 'Emballage & Hygiène', en: 'Packaging & Hygiene' },
+    products: [
+      { id: 'e1', name: 'Fritures Fry Bags 12×9' },
+      { id: 'e2', name: 'Fritures Fry Bags 12×12' },
+      { id: 'e3', name: 'Pots Sauce 30cc + Couvercles ×500' },
+      { id: 'e4', name: 'Pot Salade Kraft Brun + Couvercle 1250ml' },
+      { id: 'e5', name: 'Brown Virgin Kraft Box 260×170×260' },
+      { id: 'e6', name: 'Grand Papier Hamburger 31×38' },
+      { id: 'e7', name: 'Grand Papier Hamburger 28×24' },
+      { id: 'e8', name: 'Boîte Emportée Sandwich' },
+      { id: 'e9', name: 'Grand Rouleau Aluminium' },
+      { id: 'e10', name: 'Perga Ersatz 25×32.5cm Karton 10kg' },
+      { id: 'e11', name: 'Serviette Lovabo ×6' },
+      { id: 'e12', name: 'Carton Serviette Meva Soft' },
+      { id: 'e13', name: 'Papier Toilette' },
+      { id: 'e14', name: 'Sac Bretelles Réutilisables 28+14×48' },
+      { id: 'e15', name: 'Bobine CB ×10' },
+      { id: 'e16', name: 'Bobine Caisse Enregistreuse' },
+      { id: 'e17', name: 'Lemon Paper' },
+      { id: 'e18', name: 'Liquid Vaisselle Mains 5L' },
+      { id: 'e19', name: 'Gants L8/9' },
+    ]
+  },
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let quantities = {};
+let currentLang = 'fr';
+let activeCategory = 'all';
+let searchQuery = '';
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function render() {
+  renderCategoryNav();
+  renderProducts();
+  updateBar();
+}
+
+function renderCategoryNav() {
+  const nav = document.getElementById('catNav');
+  const allLabel = currentLang === 'fr' ? 'Tout' : 'All';
+  let html = `<button class="cat-pill ${activeCategory === 'all' ? 'active' : ''}" onclick="setCategory('all')">${allLabel}</button>`;
+  categories.forEach(cat => {
+    html += `<button class="cat-pill ${activeCategory === cat.id ? 'active' : ''}" onclick="setCategory('${cat.id}')">${cat.icon} ${cat.label[currentLang]}</button>`;
+  });
+  nav.innerHTML = html;
+}
+
+function renderProducts() {
+  const list = document.getElementById('productList');
+  const q = searchQuery.toLowerCase();
+  let html = '';
+  let anyVisible = false;
+
+  categories.forEach(cat => {
+    if (activeCategory !== 'all' && activeCategory !== cat.id) return;
+
+    const filtered = cat.products.filter(p => p.name.toLowerCase().includes(q));
+    if (filtered.length === 0) return;
+    anyVisible = true;
+
+    html += `<div class="section" id="section-${cat.id}">`;
+    html += `<div class="section-title"><span class="section-icon">${cat.icon}</span>${cat.label[currentLang]}</div>`;
+    html += `<div class="product-grid">`;
+    filtered.forEach(p => {
+      const qty = quantities[p.id] || 0;
+      html += `
+        <div class="product-card ${qty > 0 ? 'has-qty' : ''}" id="card-${p.id}">
+          ${qty > 0 ? `<div class="qty-badge">${qty}</div>` : ''}
+          <div class="product-name">${p.name}</div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty('${p.id}', -1)">−</button>
+            <input class="qty-input" type="number" min="0" value="${qty}" onchange="setQty('${p.id}', this.value)" id="inp-${p.id}">
+            <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
+          </div>
+        </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  list.innerHTML = html;
+  const empty = document.getElementById('emptyState');
+  empty.style.display = anyVisible ? 'none' : 'block';
+}
+
+function updateBar() {
+  const total = Object.values(quantities).reduce((a, b) => a + b, 0);
+  document.getElementById('totalItems').textContent = total;
+  document.getElementById('cartCount').textContent = total;
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = total === 0;
+
+  const label = currentLang === 'fr' ? 'articles' : 'items';
+  document.getElementById('summaryLabel').textContent = label + ':';
+}
+
+// ─── ACTIONS ──────────────────────────────────────────────────────────────────
+function changeQty(id, delta) {
+  const current = quantities[id] || 0;
+  const newVal = Math.max(0, current + delta);
+  quantities[id] = newVal;
+  if (newVal === 0) delete quantities[id];
+  renderProducts();
+  updateBar();
+}
+
+function setQty(id, val) {
+  const newVal = Math.max(0, parseInt(val) || 0);
+  quantities[id] = newVal;
+  if (newVal === 0) delete quantities[id];
+  updateBar();
+  // Update card styling without full re-render
+  const card = document.getElementById(`card-${id}`);
+  if (card) {
+    card.className = `product-card ${newVal > 0 ? 'has-qty' : ''}`;
+  }
+}
+
+function setCategory(id) {
+  activeCategory = id;
+  renderCategoryNav();
+  renderProducts();
+}
+
+function filterProducts() {
+  searchQuery = document.getElementById('searchInput').value;
+  renderProducts();
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function resetAll() {
+  if (Object.keys(quantities).length === 0) return;
+  if (confirm(currentLang === 'fr' ? 'Réinitialiser toute la commande ?' : 'Reset entire order?')) {
+    quantities = {};
+    render();
+  }
+}
+
+// ─── ORDER / MODAL ────────────────────────────────────────────────────────────
+function buildMessage() {
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  let msg = `Bonjour,\nLivraison pour demain matin merci 🙏\n\n`;
+
+  categories.forEach(cat => {
+    const items = cat.products.filter(p => quantities[p.id] > 0);
+    if (items.length === 0) return;
+    items.forEach(p => {
+      msg += `${quantities[p.id]} ${p.name}\n`;
+    });
+  });
+
+  msg += `\n📅 ${dateStr}`;
+  return msg;
+}
+
+function openModal() {
+  const msg = buildMessage();
+  document.getElementById('orderPreview').textContent = msg;
+  const encoded = encodeURIComponent(msg);
+  document.getElementById('waLink').href = `https://wa.me/?text=${encoded}`;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
