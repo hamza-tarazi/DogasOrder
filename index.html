@@ -7,334 +7,341 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #faf9f6;
+    --bg: #f5f4f0;
     --surface: #ffffff;
-    --surface2: #f5f3ee;
-    --border: #e8e4dc;
+    --surface2: #f0ede6;
+    --border: #e4e0d8;
     --accent: #F5C518;
     --accent2: #e0b310;
     --red: #D42B2B;
     --text: #1a1a1a;
-    --muted: #999;
+    --muted: #9a9a9a;
     --warn: #D42B2B;
-    --radius: 12px;
-    --shadow: 0 1px 4px rgba(0,0,0,0.08);
+    --radius: 14px;
+    --row-h: 58px;
   }
 
   [data-theme="dark"] {
-    --bg: #111111;
-    --surface: #1c1c1c;
-    --surface2: #252525;
-    --border: #333;
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
     --text: #f0f0f0;
-    --muted: #777;
-    --shadow: none;
+    --muted: #666;
   }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html { font-size: 16px; }
 
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding-bottom: 120px;
+    padding-bottom: 88px;
+    /* prevent zoom on double-tap */
+    touch-action: manipulation;
   }
 
+  /* ── HEADER ─────────────────────────────────────── */
   header {
     background: var(--surface);
     border-bottom: 3px solid var(--accent);
-    padding: 16px 20px;
+    padding: 12px 16px;
     position: sticky;
     top: 0;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
   }
 
   .logo {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     color: var(--red);
     letter-spacing: -0.5px;
+    flex-shrink: 0;
   }
 
-  .logo span {
-    color: var(--text);
-    opacity: 0.4;
+  .logo span { color: var(--text); opacity: 0.35; font-weight: 700; }
+
+  .header-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+  .cart-pill {
+    background: var(--accent);
+    color: #111;
     font-weight: 700;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    min-width: 40px;
+    text-align: center;
   }
+
+  .icon-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s;
+  }
+  .icon-btn:active { border-color: var(--accent); }
 
   .lang-toggle {
     display: flex;
     background: var(--surface2);
-    border-radius: 8px;
+    border-radius: 10px;
     overflow: hidden;
     border: 1px solid var(--border);
   }
 
   .lang-btn {
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
+    padding: 6px 11px;
+    font-size: 0.72rem;
+    font-weight: 700;
     font-family: 'DM Mono', monospace;
     cursor: pointer;
     border: none;
     background: transparent;
     color: var(--muted);
-    transition: all 0.2s;
-    letter-spacing: 0.05em;
+    transition: all 0.15s;
+    letter-spacing: 0.06em;
   }
+  .lang-btn.active { background: var(--accent); color: #111; }
 
-  .lang-btn.active {
-    background: var(--accent);
-    color: #111;
-  }
-
-  .header-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .cart-count {
-    background: var(--accent);
-    color: #111;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    padding: 4px 10px;
-    border-radius: 20px;
-    min-width: 36px;
-    text-align: center;
-  }
-
-  .search-wrap {
-    padding: 14px 20px 0;
-  }
+  /* ── SEARCH ─────────────────────────────────────── */
+  .search-wrap { padding: 12px 16px 0; }
 
   .search-input {
     width: 100%;
-    padding: 10px 14px;
+    padding: 12px 16px;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius);
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
+    font-size: 1rem;
     outline: none;
     transition: border-color 0.2s;
   }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
 
-  .search-input:focus {
-    border-color: var(--accent);
-  }
-
-  .search-input::placeholder {
-    color: var(--muted);
-  }
-
+  /* ── CATEGORY PILLS ─────────────────────────────── */
   .category-nav {
     display: flex;
-    gap: 8px;
-    padding: 14px 20px;
+    gap: 7px;
+    padding: 10px 16px;
     overflow-x: auto;
     scrollbar-width: none;
   }
-
   .category-nav::-webkit-scrollbar { display: none; }
 
   .cat-pill {
     white-space: nowrap;
-    padding: 6px 14px;
+    padding: 8px 15px;
     border-radius: 20px;
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 600;
     cursor: pointer;
-    border: 1px solid var(--border);
-    background: transparent;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
     color: var(--muted);
-    transition: all 0.2s;
+    transition: all 0.15s;
     font-family: 'DM Sans', sans-serif;
+    /* bigger tap zone */
+    min-height: 36px;
   }
-
   .cat-pill.active {
     background: var(--accent);
     color: #111;
     border-color: var(--accent);
   }
 
-  .section {
-    padding: 0 20px 20px;
-  }
+  /* ── SECTION HEADER ─────────────────────────────── */
+  .section { padding: 0 0 8px; }
 
   .section-title {
     font-family: 'Syne', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-size: 0.68rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.13em;
     color: var(--muted);
-    padding: 18px 0 10px;
+    padding: 16px 16px 6px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   }
-
   .section-title::after {
     content: '';
     flex: 1;
     height: 1px;
     background: var(--border);
   }
+  .section-icon { font-size: 1rem; }
 
-  .section-icon {
-    font-size: 1rem;
-  }
+  /* ── PRODUCT ROWS (full-width list) ─────────────── */
+  .product-list { display: flex; flex-direction: column; }
 
-  .product-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  @media (min-width: 500px) {
-    .product-grid { grid-template-columns: 1fr 1fr 1fr; }
-  }
-
-  .product-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 12px;
-    transition: border-color 0.2s, transform 0.15s;
-    position: relative;
+  .product-row {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    min-height: var(--row-h);
+    padding: 10px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    transition: background 0.15s;
+    position: relative;
   }
 
-  .product-card.has-qty {
-    border-color: var(--accent);
-    background: #fffbea;
+  /* alternate very subtle stripe */
+  .product-row:nth-child(even) { background: var(--surface2); }
+  [data-theme="dark"] .product-row:nth-child(even) { background: #1e1e1e; }
+
+  .product-row.has-qty {
+    background: #fffadf !important;
+    border-left: 3px solid var(--accent);
+  }
+  [data-theme="dark"] .product-row.has-qty {
+    background: #1f1c00 !important;
+    border-left: 3px solid var(--accent);
   }
 
-  [data-theme="dark"] .product-card.has-qty {
-    background: #1f1a00;
-  }
+  .product-row:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+  .product-row:last-child  { border-radius: 0 0 var(--radius) var(--radius); border-bottom: none; }
+  .product-row:only-child  { border-radius: var(--radius); border-bottom: none; }
 
   .product-name {
-    font-size: 0.82rem;
-    font-weight: 500;
-    line-height: 1.3;
-    color: var(--text);
     flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--text);
   }
 
-  .product-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--muted);
-    background: var(--surface2);
-    padding: 2px 6px;
-    border-radius: 4px;
-    display: inline-block;
-    width: fit-content;
-  }
-
+  /* ── QTY CONTROLS ───────────────────────────────── */
   .qty-row {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 2px;
+    gap: 0;
+    flex-shrink: 0;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .product-row.has-qty .qty-row {
+    border-color: var(--accent);
+    background: #fff8cc;
+  }
+  [data-theme="dark"] .product-row.has-qty .qty-row {
+    background: #2a2400;
   }
 
   .qty-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
+    width: 42px;
+    height: 42px;
+    border: none;
+    background: transparent;
     color: var(--text);
-    font-size: 1rem;
+    font-size: 1.3rem;
+    font-weight: 300;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.15s;
-    flex-shrink: 0;
+    transition: background 0.12s;
     font-family: 'DM Mono', monospace;
+    /* big tap zone */
+    touch-action: manipulation;
   }
+  .qty-btn:active { background: var(--accent); color: #111; }
 
-  .qty-btn:hover {
-    background: var(--accent);
-    color: #111;
-    border-color: var(--accent);
-  }
-
-  .qty-input {
-    width: 36px;
+  .qty-display {
+    min-width: 36px;
     text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    /* input styling */
     background: transparent;
     border: none;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.95rem;
-    font-weight: 500;
     outline: none;
+    padding: 0 2px;
+  }
+  .qty-display::-webkit-outer-spin-button,
+  .qty-display::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .qty-display[type=number] { -moz-appearance: textfield; }
+
+  /* Zero qty — show faded */
+  .qty-display.zero { color: var(--muted); }
+
+  /* ── SECTION WRAPPER for first/last radius ───────── */
+  .section-cards {
+    margin: 0 16px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] .section-cards {
+    box-shadow: none;
+    border: 1px solid var(--border);
   }
 
-  /* Remove arrows from number input */
-  .qty-input::-webkit-outer-spin-button,
-  .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
-  .qty-input[type=number] { -moz-appearance: textfield; }
-
-  .qty-badge {
-    position: absolute;
-    top: -6px;
-    right: -6px;
-    width: 20px;
-    height: 20px;
-    background: var(--accent);
-    color: #111;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    font-weight: 700;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  /* Bottom bar */
+  /* ── BOTTOM BAR ─────────────────────────────────── */
   .bottom-bar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     background: var(--surface);
-    border-top: 1px solid var(--border);
-    padding: 12px 20px;
+    border-top: 1.5px solid var(--border);
+    padding: 10px 16px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
     z-index: 100;
   }
 
   .order-summary {
     flex: 1;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--muted);
     font-family: 'DM Mono', monospace;
   }
+  .order-summary strong { color: var(--accent); font-size: 1.1rem; }
 
-  .order-summary strong {
-    color: var(--accent);
-    font-size: 1rem;
+  .reset-btn {
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
   }
+  .reset-btn:active { border-color: var(--warn); color: var(--warn); }
 
   .send-btn {
     display: flex;
@@ -343,112 +350,80 @@
     background: var(--accent);
     color: #111;
     font-family: 'Syne', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
+    font-weight: 800;
+    font-size: 0.95rem;
     border: none;
     padding: 12px 20px;
     border-radius: var(--radius);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.15s;
     white-space: nowrap;
+    height: 44px;
   }
+  .send-btn:active { background: var(--accent2); transform: scale(0.97); }
+  .send-btn:disabled { background: var(--border); color: var(--muted); transform: none; cursor: not-allowed; }
 
-  .send-btn:hover {
-    background: var(--accent2);
-    transform: translateY(-1px);
-  }
+  .wa-icon { width: 18px; height: 18px; flex-shrink: 0; }
 
-  .send-btn:disabled {
-    background: var(--border);
-    color: var(--muted);
-    transform: none;
-    cursor: not-allowed;
-  }
-
-  .wa-icon {
-    width: 20px;
-    height: 20px;
-  }
-
-  .reset-btn {
-    padding: 10px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: transparent;
-    color: var(--muted);
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .reset-btn:hover {
-    border-color: var(--warn);
-    color: var(--warn);
-  }
-
-  /* Modal */
+  /* ── MODAL ──────────────────────────────────────── */
   .modal-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.75);
     z-index: 200;
     align-items: flex-end;
     justify-content: center;
   }
-
-  .modal-overlay.open {
-    display: flex;
-  }
+  .modal-overlay.open { display: flex; }
 
   .modal {
     background: var(--surface);
-    border-radius: 20px 20px 0 0;
-    padding: 24px 20px;
+    border-radius: 22px 22px 0 0;
+    padding: 20px 16px;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
     width: 100%;
-    max-width: 540px;
-    border-top: 1px solid var(--border);
-    animation: slideUp 0.25s ease;
+    max-width: 560px;
+    animation: slideUp 0.22s ease;
   }
 
   @keyframes slideUp {
     from { transform: translateY(40px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 16px;
   }
 
   .modal-title {
     font-family: 'Syne', sans-serif;
     font-size: 1.1rem;
     font-weight: 800;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
-  .modal-sub {
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
+  .modal-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 14px; }
 
   .order-preview {
     background: var(--surface2);
     border-radius: var(--radius);
     padding: 14px;
     font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    line-height: 1.8;
+    font-size: 0.78rem;
+    line-height: 1.85;
     color: var(--text);
-    max-height: 220px;
+    max-height: 200px;
     overflow-y: auto;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     border: 1px solid var(--border);
     white-space: pre-wrap;
   }
 
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-  }
+  .modal-actions { display: flex; gap: 10px; }
 
   .wa-send-btn {
     flex: 1;
@@ -459,57 +434,179 @@
     background: var(--accent);
     color: #111;
     font-family: 'Syne', sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.95rem;
     border: none;
     padding: 14px;
     border-radius: var(--radius);
     cursor: pointer;
     text-decoration: none;
-    transition: background 0.2s;
+    height: 50px;
   }
-
-  .wa-send-btn:hover { background: var(--accent2); }
+  .wa-send-btn:active { background: var(--accent2); }
 
   .cancel-btn {
     padding: 14px 18px;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius);
     background: transparent;
     color: var(--muted);
     cursor: pointer;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.9rem;
+    height: 50px;
+    display: flex;
+    align-items: center;
   }
 
+  /* ── EMPTY STATE ────────────────────────────────── */
   .empty-state {
     text-align: center;
-    padding: 40px 20px;
+    padding: 48px 20px;
     color: var(--muted);
     font-size: 0.9rem;
     display: none;
   }
 
+  .hidden { display: none !important; }
 
-  .theme-btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
+  /* ── CUSTOM ITEMS ───────────────────────────────── */
+  .custom-section {
+    margin: 0 16px 24px;
+  }
+
+  .custom-add-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--surface);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    transition: border-color 0.2s;
+  }
+
+  .custom-add-row:focus-within {
+    border-color: var(--accent);
+    border-style: solid;
+  }
+
+  .custom-name-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    outline: none;
+    min-width: 0;
+  }
+
+  .custom-name-input::placeholder { color: var(--muted); }
+
+  .custom-qty-input {
+    width: 44px;
+    text-align: center;
+    border: 1.5px solid var(--border);
     border-radius: 8px;
-    width: 34px;
-    height: 34px;
+    background: var(--surface2);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    padding: 6px 4px;
+    outline: none;
+    flex-shrink: 0;
+  }
+  .custom-qty-input:focus { border-color: var(--accent); }
+  .custom-qty-input::-webkit-outer-spin-button,
+  .custom-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+  .custom-qty-input[type=number] { -moz-appearance: textfield; }
+
+  .custom-add-btn {
+    width: 40px;
+    height: 40px;
+    background: var(--accent);
+    color: #111;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.3rem;
+    font-weight: 700;
     cursor: pointer;
-    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
+    flex-shrink: 0;
+    transition: background 0.15s, transform 0.1s;
+    touch-action: manipulation;
+  }
+  .custom-add-btn:active { background: var(--accent2); transform: scale(0.93); }
+  .custom-add-btn:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; transform: none; }
+
+  .custom-list {
+    margin-top: 8px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  [data-theme="dark"] .custom-list {
+    box-shadow: none;
+    border: 1px solid var(--border);
   }
 
-  .theme-btn:hover {
-    border-color: var(--accent);
+  .custom-item-row {
+    display: flex;
+    align-items: center;
+    min-height: 54px;
+    padding: 8px 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+    border-left: 3px solid var(--accent);
+    background: #fffadf;
+  }
+  [data-theme="dark"] .custom-item-row { background: #1f1c00; }
+  .custom-item-row:last-child { border-bottom: none; }
+  .custom-item-row:first-child { border-radius: var(--radius) var(--radius) 0 0; }
+  .custom-item-row:last-child  { border-radius: 0 0 var(--radius) var(--radius); }
+  .custom-item-row:only-child  { border-radius: var(--radius); }
+
+  .custom-item-name {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.25;
   }
 
-  .hidden { display: none !important; }
+  .custom-item-qty {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111;
+    background: var(--accent);
+    padding: 3px 9px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .custom-del-btn {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    touch-action: manipulation;
+  }
+  .custom-del-btn:active { border-color: var(--warn); color: var(--warn); background: #fff0f0; }
 </style>
 </head>
 <body>
@@ -517,8 +614,8 @@
 <header>
   <div class="logo">Doga's<span> Order</span></div>
   <div class="header-right">
-    <div class="cart-count" id="cartCount">0</div>
-    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀️</button>
+    <div class="cart-pill" id="cartCount">0</div>
+    <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Toggle theme">☀️</button>
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('fr')">FR</button>
       <button class="lang-btn" onclick="setLang('en')">EN</button>
@@ -531,7 +628,6 @@
 </div>
 
 <div class="category-nav" id="catNav"></div>
-
 <div id="productList"></div>
 
 <div class="empty-state" id="emptyState">
@@ -539,217 +635,381 @@
   <span id="emptyText">Aucun produit trouvé / No product found</span>
 </div>
 
+<!-- Custom Items Section -->
+<div class="section" style="padding-bottom:0">
+  <div class="section-title" style="padding: 16px 16px 6px">
+    <span class="section-icon">✏️</span><span id="customSectionTitle">Produit personnalisé</span>
+  </div>
+</div>
+<div class="custom-section">
+  <div class="custom-add-row">
+    <input class="custom-name-input" type="text" id="customName"
+      placeholder="Nom du produit…"
+      onkeydown="if(event.key==='Enter') addCustomItem()"
+      oninput="document.getElementById('customAddBtn').disabled = !this.value.trim()">
+    <input class="custom-qty-input" type="number" id="customQty" value="1" min="1" max="999">
+    <button class="custom-add-btn" id="customAddBtn" onclick="addCustomItem()" disabled title="Ajouter">+</button>
+  </div>
+  <div class="custom-list" id="customList"></div>
+</div>
+
 <div class="bottom-bar">
   <div class="order-summary">
-    <span id="summaryLabel">Items:</span> <strong id="totalItems">0</strong>
+    <span id="summaryLabel">Articles:</span> <strong id="totalItems">0</strong>
   </div>
-  <button class="reset-btn" onclick="resetAll()" id="resetBtn">
-    <span id="resetLabel">Reset</span>
-  </button>
+  <button class="reset-btn" onclick="resetAll()" id="resetBtn" title="Reset">🗑️</button>
   <button class="send-btn" onclick="openModal()" id="sendBtn" disabled>
     <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
       <path d="M12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.1 1.522 5.836L0 24l6.336-1.501A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.805 9.805 0 01-5.006-1.371l-.359-.214-3.723.882.939-3.618-.233-.372A9.795 9.795 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/>
     </svg>
-    <span id="sendLabel">Envoyer / Send</span>
+    <span id="sendLabel">Envoyer</span>
   </button>
 </div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal">
-    <div class="modal-title" id="modalTitle">📋 Votre commande / Your order</div>
-    <div class="modal-sub" id="modalSub">WhatsApp va s'ouvrir avec votre commande pré-remplie.<br>WhatsApp will open with your order pre-filled.</div>
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle">📋 Votre commande</div>
+    <div class="modal-sub" id="modalSub">WhatsApp s'ouvre avec votre commande pré-remplie.</div>
     <div class="order-preview" id="orderPreview"></div>
     <div class="modal-actions">
-      <button class="cancel-btn" onclick="document.getElementById('modalOverlay').classList.remove('open')" id="cancelBtn">Annuler / Cancel</button>
+      <button class="cancel-btn" onclick="document.getElementById('modalOverlay').classList.remove('open')">Annuler</button>
       <a class="wa-send-btn" id="waLink" href="#" target="_blank">
         <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
           <path d="M12 0C5.373 0 0 5.373 0 12c0 2.114.553 4.1 1.522 5.836L0 24l6.336-1.501A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.805 9.805 0 01-5.006-1.371l-.359-.214-3.723.882.939-3.618-.233-.372A9.795 9.795 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/>
         </svg>
-        <span id="openWaLabel">Ouvrir WhatsApp</span>
+        Ouvrir WhatsApp
       </a>
     </div>
   </div>
 </div>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────────────────────
 const categories = [
+
+  // ── 1. FRAIS & LÉGUMES ────────────────────────────────────────────────────
   {
     id: 'fresh', icon: '🥬',
     label: { fr: 'Frais & Légumes', en: 'Fresh & Veg' },
     products: [
-      { id: 'p1', name: 'Salade Iceberg' },
-      { id: 'p2', name: 'Tomate Cagette' },
-      { id: 'p3', name: 'Oignon Jaune 25kg' },
-      { id: 'p4', name: 'Yogurt Nature 5kg' },
-      { id: 'p5', name: 'Lait ×6' },
-      { id: 'p6', name: 'Oeufs ×30' },
-      { id: 'p7', name: 'Crème Légère Président ×6' },
+      { id: 'p1',  name: { fr: 'Salade Iceberg',               en: 'Iceberg Lettuce' } },
+      { id: 'p2',  name: { fr: 'Tomate Cagette',               en: 'Tomatoes (Crate)' } },
+      { id: 'p3',  name: { fr: 'Oignon Jaune 25kg',            en: 'Yellow Onion 25kg' } },
+      { id: 'p30', name: { fr: 'Haricot Vert',                 en: 'Green Beans' } },
+      { id: 'p31', name: { fr: 'Pomme de Terre',               en: 'Potatoes' } },
+      { id: 'p32', name: { fr: 'Poivron Rouge 1kg',            en: 'Red Bell Pepper 1kg' } },
+      { id: 'p33', name: { fr: 'Poivron Vert 1kg',             en: 'Green Bell Pepper 1kg' } },
+      { id: 'p4',  name: { fr: 'Yaourt Nature 5kg',            en: 'Plain Yogurt 5kg' } },
+      { id: 'p5',  name: { fr: 'Lait ×6',                      en: 'Milk ×6' } },
+      { id: 'p6',  name: { fr: 'Oeufs ×30',                    en: 'Eggs ×30' } },
+      { id: 'p7',  name: { fr: 'Crème Légère Président ×6',    en: 'Président Light Cream ×6' } },
+      { id: 'p8',  name: { fr: 'Crème Chantilly',              en: 'Whipped Cream' } },
     ]
   },
+
+  // ── 2. VIANDES & VOLAILLES ────────────────────────────────────────────────
   {
     id: 'meat', icon: '🍗',
     label: { fr: 'Viandes & Volailles', en: 'Meat & Poultry' },
     products: [
-      { id: 'm1', name: 'Filet de Poulet 30kg' },
-      { id: 'm2', name: 'Filet de Poulet 20kg' },
-      { id: 'm3', name: 'Aile de Poulet 30kg' },
-      { id: 'm4', name: 'Poulet Entier Carton' },
-      { id: 'm5', name: 'Bacon de Boeuf' },
-      { id: 'm6', name: 'Steak 45g' },
-      { id: 'm7', name: 'Steak 90g' },
-      { id: 'm8', name: 'Steak 150g' },
-      { id: 'm9', name: 'Biggy Burger 10kg' },
-      { id: 'm10', name: 'Chicken Burger Steak 1kg' },
-      { id: 'm11', name: 'Sachet Filet Poulet Tender Burgers' },
+      { id: 'm1',  name: { fr: 'Filet de Poulet 10kg',              en: 'Chicken Fillet 10kg' } },
+      { id: 'm3',  name: { fr: 'Aile de Poulet 10kg',               en: 'Chicken Wings 10kg' } },
+      { id: 'm4',  name: { fr: 'Poulet Entier',                     en: 'Whole Chicken' } },
+      { id: 'm5',  name: { fr: 'Bacon de Boeuf',                    en: 'Beef Bacon' } },
+      { id: 'm6',  name: { fr: 'Steak 45g',                         en: 'Steak 45g' } },
+      { id: 'm7',  name: { fr: 'Steak 90g',                         en: 'Steak 90g' } },
+      { id: 'm8',  name: { fr: 'Steak 150g',                        en: 'Steak 150g' } },
+      { id: 'm10', name: { fr: 'Chicken Burger Steak 1kg',          en: 'Chicken Burger Steak 1kg' } },
+      { id: 'm11', name: { fr: 'Sachet Filet Poulet Tender Burgers', en: 'Chicken Tender Burger Fillet Bag' } },
+      { id: 'm12', name: { fr: 'Merguez 1kg',                       en: 'Merguez Sausage 1kg' } },
+      { id: 'm13', name: { fr: 'Viande Hachée',                     en: 'Minced Meat' } },
+      { id: 'm14', name: { fr: 'Côte d\'Agneau',                    en: 'Lamb Chop' } },
+      { id: 'm15', name: { fr: 'Entrecôte',                         en: 'Ribeye Steak' } },
+      { id: 'm16', name: { fr: 'Pavé de Saumons',                   en: 'Salmon Fillet' } },
+      { id: 'm17', name: { fr: 'Filet de Poisson Fish & Chips',     en: 'Fish & Chips Fillet' } },
     ]
   },
+
+  // ── 3. FROMAGERIE & BEURRE ────────────────────────────────────────────────
   {
     id: 'dairy', icon: '🧀',
     label: { fr: 'Fromagerie & Beurre', en: 'Dairy & Cheese' },
     products: [
-      { id: 'd1', name: 'Dairy Maid Slice Fromage Carton' },
-      { id: 'd2', name: 'La Bonne Vache Carton' },
-      { id: 'd3', name: 'Emmental Râpé' },
-      { id: 'd4', name: 'Fromage Chèvre' },
-      { id: 'd5', name: 'Gold Butter Mix' },
-      { id: 'd6', name: 'Beurre de Laiterie' },
+      { id: 'd1', name: { fr: 'Dairy Maid Fromage Cheddar', en: 'Dairy Maid Cheddar Cheese' } },
+      { id: 'd2', name: { fr: 'La Bonne Vache',             en: 'La Bonne Vache (Cheese)' } },
+      { id: 'd3', name: { fr: 'Emmental Râpé',              en: 'Grated Emmental' } },
+      { id: 'd4', name: { fr: 'Fromage Chèvre',             en: 'Goat Cheese' } },
+      { id: 'd5', name: { fr: 'Gold Butter Mix',            en: 'Gold Butter Mix' } },
+      { id: 'd6', name: { fr: 'Beurre de Laiterie',         en: 'Dairy Butter' } },
     ]
   },
+
+  // ── 4. FRITES & FÉCULENTS ─────────────────────────────────────────────────
   {
     id: 'frites', icon: '🍟',
     label: { fr: 'Frites & Féculents', en: 'Fries & Starches' },
     products: [
-      { id: 'f1', name: 'My Frite 6/6' },
-      { id: 'f2', name: 'Potatoes Wedges Sac' },
-      { id: 'f3', name: 'Rösti Round Sac' },
-      { id: 'f4', name: 'Onion Rings Sac' },
-      { id: 'f5', name: 'Mozza Sticks Sac' },
-      { id: 'f6', name: 'Heer Riz 20kg' },
+      { id: 'f1', name: { fr: 'My Frite 6/6',        en: 'My Frite 6/6' } },
+      { id: 'f2', name: { fr: 'Potatoes Wedges',      en: 'Potato Wedges' } },
+      { id: 'f3', name: { fr: 'Rösti Round',          en: 'Rösti Round' } },
+      { id: 'f4', name: { fr: 'Onion Rings',          en: 'Onion Rings' } },
+      { id: 'f5', name: { fr: 'Mozza Sticks',         en: 'Mozzarella Sticks' } },
+      { id: 'f6', name: { fr: 'Heer Riz 20kg',        en: 'Heer Rice 20kg' } },
+      { id: 'f7', name: { fr: 'Onion Crispy',         en: 'Crispy Onions' } },
+      { id: 'f8', name: { fr: 'Mélange Cajun Frite',  en: 'Cajun Fries Mix' } },
     ]
   },
+
+  // ── 5. BOULANGERIE & FARINES ──────────────────────────────────────────────
   {
     id: 'boulangerie', icon: '🍞',
     label: { fr: 'Boulangerie & Farines', en: 'Bakery & Flour' },
     products: [
-      { id: 'b1', name: 'Pain Black Toast Brioche Multigrain' },
-      { id: 'b2', name: 'Pain Black Toast Brioche Nature' },
-      { id: 'b3', name: 'Pain Americano 100g' },
-      { id: 'b4', name: 'Antalya Flour Tortillas' },
-      { id: 'b5', name: 'Farine Juliette 20kg' },
-      { id: 'b6', name: 'Farine Juliette 10kg' },
-      { id: 'b7', name: 'Base Breading 11kg' },
-      { id: 'b8', name: 'Chicken Breading Salé' },
-      { id: 'b9', name: 'Baking Powder' },
-      { id: 'b10', name: 'Poudre d\'Amandes' },
-      { id: 'b11', name: 'Poudre Noix de Coco' },
+      { id: 'b1',  name: { fr: 'Pain Black Toast Brioche Multigrain', en: 'Multigrain Brioche Black Toast' } },
+      { id: 'b2',  name: { fr: 'Pain Black Toast Brioche Nature',     en: 'Plain Brioche Black Toast' } },
+      { id: 'b11', name: { fr: 'Pain Americano 1002',                 en: 'Americano Bread 1002' } },
+      { id: 'b12', name: { fr: 'Pain Americano 1005',                 en: 'Americano Bread 1005' } },
+      { id: 'b13', name: { fr: 'Pain Kebab',                          en: 'Kebab Bread' } },
+      { id: 'b14', name: { fr: 'Pâte à Pain',                         en: 'Bread Dough' } },
+      { id: 'b4',  name: { fr: 'Antalya Flour Tortillas',             en: 'Antalya Flour Tortillas' } },
+      { id: 'b5',  name: { fr: 'Farine Juliette 10kg',                en: 'Juliette Flour 10kg' } },
+      { id: 'b6',  name: { fr: 'Base Breading 11kg',                  en: 'Breading Base 11kg' } },
+      { id: 'b7',  name: { fr: 'Chicken Breading Salé',               en: 'Salted Chicken Breading' } },
+      { id: 'b8',  name: { fr: 'Baking Powder',                       en: 'Baking Powder' } },
+      { id: 'b9',  name: { fr: 'Poudre d\'Amandes',                   en: 'Almond Powder' } },
+      { id: 'b10', name: { fr: 'Poudre Noix de Coco',                 en: 'Coconut Powder' } },
     ]
   },
+
+  // ── 6. PÂTES & FÉCULENTS SECS ─────────────────────────────────────────────
+  {
+    id: 'pates', icon: '🍝',
+    label: { fr: 'Pâtes & Féculents Secs', en: 'Pasta & Dry Starches' },
+    products: [
+      { id: 'pa1', name: { fr: 'Pâtes Penne',    en: 'Penne Pasta' } },
+      { id: 'pa2', name: { fr: 'Pâtes 57 Penne', en: '57 Penne Pasta' } },
+      { id: 'pa3', name: { fr: 'Croutons',        en: 'Croutons' } },
+    ]
+  },
+
+  // ── 7. SAUCES & CONDIMENTS ────────────────────────────────────────────────
   {
     id: 'sauces', icon: '🧴',
     label: { fr: 'Sauces & Condiments', en: 'Sauces & Condiments' },
     products: [
-      { id: 's1', name: 'Ketchup Dosette Sticks' },
-      { id: 's2', name: 'Ketchup Sauce 5kg' },
-      { id: 's3', name: 'Seau Ketchup 10kg' },
-      { id: 's4', name: 'Mayonnaise Dosette Sticks' },
-      { id: 's5', name: 'Tartare Sauce Bidon' },
-      { id: 's6', name: 'Moutarde Sauce' },
-      { id: 's7', name: 'Moutarde Miel Sauce' },
-      { id: 's8', name: 'Sauce Barbecue Dosette' },
-      { id: 's9', name: 'Samurai Sauce Dosette Sticks' },
-      { id: 's10', name: 'Seau Samurai 10kg' },
-      { id: 's11', name: 'Algérienne Sauce Dosette Sticks' },
-      { id: 's12', name: 'Sauce Blanche 10kg' },
-      { id: 's13', name: 'Sauce Verte' },
-      { id: 's14', name: 'Biggy Dosette' },
-      { id: 's15', name: 'Vinegar Liquid Carton' },
+      // ─ Dosette Sticks ─
+      { id: 's1a',  name: { fr: 'Ketchup Dosette Sticks',         en: 'Ketchup Portion Sticks' } },
+      { id: 's2a',  name: { fr: 'Mayonnaise Dosette Sticks',      en: 'Mayonnaise Portion Sticks' } },
+      { id: 's4a',  name: { fr: 'Moutarde Dosette Sticks',        en: 'Mustard Portion Sticks' } },
+      { id: 's4b',  name: { fr: 'Moutarde Miel Dosette Sticks',   en: 'Honey Mustard Portion Sticks' } },
+      { id: 's5a',  name: { fr: 'Barbecue Dosette Sticks',        en: 'BBQ Sauce Portion Sticks' } },
+      { id: 's6a',  name: { fr: 'Samouraï Dosette Sticks',        en: 'Samurai Sauce Portion Sticks' } },
+      { id: 's7a',  name: { fr: 'Algérienne Dosette Sticks',      en: 'Algerian Sauce Portion Sticks' } },
+      { id: 's10a', name: { fr: 'Biggy Dosette Sticks',           en: 'Biggy Sauce Portion Sticks' } },
+      { id: 's11a', name: { fr: 'Andalouse Dosette Sticks',       en: 'Andalouse Sauce Portion Sticks' } },
+      // ─ 10kg ─
+      { id: 's1c',  name: { fr: 'Ketchup 10kg',                   en: 'Ketchup 10kg' } },
+      { id: 's6b',  name: { fr: 'Samouraï 10kg',                  en: 'Samurai Sauce 10kg' } },
+      { id: 's8a',  name: { fr: 'Sauce Blanche 10kg',             en: 'White Sauce 10kg' } },
+      { id: 's10b', name: { fr: 'Biggy Burger 10kg',              en: 'Biggy Burger Sauce 10kg' } },
+      // ─ Bidon ─
+      { id: 's1b',  name: { fr: 'Ketchup Bidon 5kg',              en: 'Ketchup Bottle 5kg' } },
+      { id: 's6c',  name: { fr: 'Samouraï Bidon',                 en: 'Samurai Sauce Bottle' } },
+      { id: 's8b',  name: { fr: 'Sauce Blanche Bidon',            en: 'White Sauce Bottle' } },
+      { id: 's10c', name: { fr: 'Biggy Burger Bidon',             en: 'Biggy Burger Sauce Bottle' } },
+      { id: 's3a',  name: { fr: 'Tartare Bidon',                  en: 'Tartar Sauce Bottle' } },
+      // ─ Autres ─
+      { id: 's4c',  name: { fr: 'Moutarde à l\'Ancienne',         en: 'Wholegrain Mustard' } },
+      { id: 's9a',  name: { fr: 'Sauce Verte',                    en: 'Green Sauce' } },
+      { id: 's12a', name: { fr: 'Vinegar Liquid',                 en: 'Liquid Vinegar' } },
+      { id: 's13',  name: { fr: 'Harissa du Cap Bon',             en: 'Harissa Cap Bon' } },
+      { id: 's14',  name: { fr: 'Pulp de Mangue',                 en: 'Mango Pulp' } },
+      { id: 's15',  name: { fr: 'Caramel Vahiné',                 en: 'Vahiné Caramel' } },
+      { id: 's16',  name: { fr: 'Chocolat Vahiné',                en: 'Vahiné Chocolate Sauce' } },
+      { id: 's17',  name: { fr: 'Sirop Vanille',                  en: 'Vanilla Syrup' } },
+      { id: 's18',  name: { fr: 'Balsamique',                     en: 'Balsamic Vinegar' } },
+      { id: 's19',  name: { fr: 'Nutella 1000g',                  en: 'Nutella 1000g' } },
     ]
   },
+
+  // ── 8. HUILES & ÉPICES ────────────────────────────────────────────────────
   {
     id: 'huiles', icon: '🛢️',
     label: { fr: 'Huiles & Épices', en: 'Oils & Spices' },
     products: [
-      { id: 'h1', name: 'Bingoil Huile Tournesol 10L' },
-      { id: 'h2', name: 'Huile AVR60 Rape Seed Oil' },
-      { id: 'h3', name: 'Jeera Powder (Indien)' },
-      { id: 'h4', name: 'Poudre Paprika' },
-      { id: 'h5', name: 'Sel Fin de Table 10kg' },
-      { id: 'h6', name: 'Biryani Paste' },
+      { id: 'h1',  name: { fr: 'Bingoil Huile Tournesol 10L',  en: 'Bingoil Sunflower Oil 10L' } },
+      { id: 'h2',  name: { fr: 'Huile AVR60 Rape Seed Oil',    en: 'AVR60 Rapeseed Oil' } },
+      { id: 'h3',  name: { fr: 'Huile d\'Olive',               en: 'Olive Oil' } },
+      { id: 'h4',  name: { fr: 'Jeera Powder (Indien)',         en: 'Cumin Powder (Indian)' } },
+      { id: 'h5',  name: { fr: 'Poudre Paprika',               en: 'Paprika Powder' } },
+      { id: 'h6',  name: { fr: 'Sel Fin de Table 10kg',        en: 'Fine Table Salt 10kg' } },
+      { id: 'h7',  name: { fr: 'Sel 1kg',                      en: 'Salt 1kg' } },
+      { id: 'h8',  name: { fr: 'Sucre 1kg',                    en: 'Sugar 1kg' } },
+      { id: 'h9',  name: { fr: 'Biryani Paste',                en: 'Biryani Paste' } },
+      { id: 'h10', name: { fr: 'Cheesy Yummy',                  en: 'Cheesy Yummy' } },
     ]
   },
+
+  // ── 9. SURGELÉS & SNACKS ──────────────────────────────────────────────────
   {
     id: 'frozen', icon: '🧊',
     label: { fr: 'Surgelés & Snacks', en: 'Frozen & Snacks' },
     products: [
-      { id: 'fr1', name: 'Samosa Légumes' },
-      { id: 'fr2', name: 'Samosa Poulet' },
+      { id: 'fr1', name: { fr: 'Samosa Légumes',         en: 'Vegetable Samosa' } },
+      { id: 'fr2', name: { fr: 'Samosa Poulet',          en: 'Chicken Samosa' } },
+      { id: 'fr3', name: { fr: 'Gaufres McLam Bruxelles', en: 'McLam Brussels Waffles' } },
     ]
   },
+
+  // ── 10. DESSERTS ──────────────────────────────────────────────────────────
   {
     id: 'desserts', icon: '🍮',
     label: { fr: 'Desserts', en: 'Desserts' },
     products: [
-      { id: 'des1', name: 'Tiramisu Choco Caramel' },
-      { id: 'des2', name: 'Tiramisu Caramel Spéculoos' },
-      { id: 'des3', name: 'Tiramisu Pistache' },
-      { id: 'des4', name: 'Tiramisu Bueno' },
-      { id: 'des5', name: 'Pot Fast Milkshake 400ml' },
+      { id: 'des1',  name: { fr: 'Tiramisu Choco Caramel',       en: 'Tiramisu Choco Caramel' } },
+      { id: 'des2',  name: { fr: 'Tiramisu Caramel Spéculoos',   en: 'Tiramisu Caramel Speculoos' } },
+      { id: 'des3',  name: { fr: 'Tiramisu Pistache',            en: 'Tiramisu Pistachio' } },
+      { id: 'des4',  name: { fr: 'Tiramisu Kinder Bueno',        en: 'Tiramisu Kinder Bueno' } },
+      { id: 'des5',  name: { fr: 'Tiramisu Nutella Spéculoos',   en: 'Tiramisu Nutella Speculoos' } },
+      { id: 'des6',  name: { fr: 'Tiramisu Daim Caramel',        en: 'Tiramisu Daim Caramel' } },
+      { id: 'des7',  name: { fr: 'Tiramisu Snickers',            en: 'Tiramisu Snickers' } },
+      { id: 'des8',  name: { fr: 'Tiramisu Fraisier',            en: 'Tiramisu Strawberry' } },
+      { id: 'des9',  name: { fr: 'Tiramisu Chocobons',           en: 'Tiramisu Chocobons' } },
+      { id: 'des10', name: { fr: 'Tiramisu Trianon Daim',        en: 'Tiramisu Trianon Daim' } },
+      { id: 'des11', name: { fr: 'Tiramisu Trianon M&M\'s',      en: 'Tiramisu Trianon M&M\'s' } },
+      { id: 'des12', name: { fr: 'Tiramisu Banatella',           en: 'Tiramisu Banatella' } },
+      { id: 'des13', name: { fr: 'Tiramisu Mango',               en: 'Tiramisu Mango' } },
+      { id: 'des14', name: { fr: 'Tiramisu Crunch',              en: 'Tiramisu Crunch' } },
+      { id: 'des15', name: { fr: 'Tiramisu Oreo',                en: 'Tiramisu Oreo' } },
+      { id: 'des16', name: { fr: 'Pot Fast Milkshake 400ml',     en: 'Fast Milkshake Cup 400ml' } },
+      { id: 'des17', name: { fr: 'Twix',                         en: 'Twix' } },
+      { id: 'des18', name: { fr: 'Bounty',                       en: 'Bounty' } },
+      { id: 'des19', name: { fr: 'Kit Kat',                      en: 'Kit Kat' } },
+      { id: 'des20', name: { fr: 'Kinder Bueno',                 en: 'Kinder Bueno' } },
+      { id: 'des21', name: { fr: 'Compte Pom',                   en: 'Compte Pom' } },
+      { id: 'des22', name: { fr: 'Capri Sun Multi Vita',         en: 'Capri Sun Multi Vita' } },
     ]
   },
+
+  // ── 11. SMOOTHIES ─────────────────────────────────────────────────────────
   {
-    id: 'boissons', icon: '🥤',
+    id: 'smoothies', icon: '🍓',
+    label: { fr: 'Smoothies', en: 'Smoothies' },
+    products: [
+      { id: 'sm1', name: { fr: 'Smoothie Tropical',     en: 'Tropical Smoothie' } },
+      { id: 'sm2', name: { fr: 'Smoothie Colada',       en: 'Colada Smoothie' } },
+      { id: 'sm3', name: { fr: 'Smoothie Coco Mango',   en: 'Coco Mango Smoothie' } },
+      { id: 'sm4', name: { fr: 'Smoothie Boost',        en: 'Boost Smoothie' } },
+      { id: 'sm5', name: { fr: 'Smoothie Fresh',        en: 'Fresh Smoothie' } },
+      { id: 'sm6', name: { fr: 'Smoothie Melon Pop',    en: 'Melon Pop Smoothie' } },
+      { id: 'sm7', name: { fr: 'Smoothie Ultra Violet', en: 'Ultra Violet Smoothie' } },
+      { id: 'sm8', name: { fr: 'Smoothie Exotic',       en: 'Exotic Smoothie' } },
+    ]
+  },
+
+  // ── 12. BOISSONS ──────────────────────────────────────────────────────────
+  {
+    id: 'boissons', icon: '🧃',
     label: { fr: 'Boissons', en: 'Drinks' },
     products: [
-      { id: 'boi1', name: 'Cristaline Eau 50cl' },
-      { id: 'boi2', name: 'Cristaline Pêche 50cl' },
-      { id: 'boi3', name: 'Cristaline Fraise 50cl' },
-      { id: 'boi4', name: 'Cristaline Citron 50cl' },
-      { id: 'boi5', name: 'Coca Normal Europ 33cl' },
-      { id: 'boi6', name: 'Coca Zero 33cl' },
-      { id: 'boi7', name: 'Coca Cherry 33cl' },
-      { id: 'boi8', name: 'Coca Normal 1.5L' },
-      { id: 'boi9', name: 'Fanta Orange 33cl' },
-      { id: 'boi10', name: 'Fanta Citron 33cl' },
-      { id: 'boi11', name: 'Schweppes Pomme 33cl' },
-      { id: 'boi12', name: 'Oasis Tropical 33cl' },
-      { id: 'boi13', name: 'Lipton Ice Tea 33cl' },
-      { id: 'boi14', name: 'Lipton Ice Tea 1.5L' },
-      { id: 'boi15', name: '7up Citron 33cl' },
-      { id: 'boi16', name: '7up Citron 1.5L' },
-      { id: 'boi17', name: 'Tropico 33cl' },
-      { id: 'boi18', name: 'Tropico 1.5L' },
-      { id: 'boi19', name: 'Perrier 33cl' },
+      { id: 'boi1',  name: { fr: 'Cristaline Eau 50cl',                  en: 'Cristaline Water 50cl' } },
+      { id: 'boi2',  name: { fr: 'Cristaline Pêche 50cl',                en: 'Cristaline Peach 50cl' } },
+      { id: 'boi3',  name: { fr: 'Cristaline Fraise 50cl',               en: 'Cristaline Strawberry 50cl' } },
+      { id: 'boi4',  name: { fr: 'Cristaline Citron 50cl',               en: 'Cristaline Lemon 50cl' } },
+      { id: 'boi5',  name: { fr: 'Coca Cola 33cl',                       en: 'Coca Cola 33cl' } },
+      { id: 'boi6',  name: { fr: 'Coca Cola Zéro 33cl',                  en: 'Coca Cola Zero 33cl' } },
+      { id: 'boi7',  name: { fr: 'Coca Cola Cherry 33cl',                en: 'Coca Cola Cherry 33cl' } },
+      { id: 'boi8',  name: { fr: 'Coca Cola 1.5L',                       en: 'Coca Cola 1.5L' } },
+      { id: 'boi9',  name: { fr: 'Fanta Orange 33cl',                    en: 'Fanta Orange 33cl' } },
+      { id: 'boi10', name: { fr: 'Fanta Citron 33cl',                    en: 'Fanta Lemon 33cl' } },
+      { id: 'boi11', name: { fr: 'Fanta Exotic 33cl',                    en: 'Fanta Exotic 33cl' } },
+      { id: 'boi12', name: { fr: 'Fanta Fruit du Dragon 33cl',           en: 'Fanta Dragon Fruit 33cl' } },
+      { id: 'boi13', name: { fr: 'Fanta Strawberry Kiwi 33cl',           en: 'Fanta Strawberry Kiwi 33cl' } },
+      { id: 'boi30', name: { fr: 'Fanta Délice Tropical 33cl',           en: 'Fanta Tropical Delight 33cl' } },
+      { id: 'boi14', name: { fr: 'Schweppes Pomme 33cl',                 en: 'Schweppes Apple 33cl' } },
+      { id: 'boi15', name: { fr: 'Schweppes Agrumes 33cl',               en: 'Schweppes Citrus 33cl' } },
+      { id: 'boi16', name: { fr: 'Oasis Tropical 33cl',                  en: 'Oasis Tropical 33cl' } },
+      { id: 'boi17', name: { fr: 'Oasis Pomme Cassis Framboise 33cl',    en: 'Oasis Apple Blackcurrant Raspberry 33cl' } },
+      { id: 'boi18', name: { fr: 'Orangina 33cl',                        en: 'Orangina 33cl' } },
+      { id: 'boi19', name: { fr: 'Lipton Ice Tea Pêche 33cl',            en: 'Lipton Peach Ice Tea 33cl' } },
+      { id: 'boi20', name: { fr: 'Lipton Pastèque Menthe 33cl',          en: 'Lipton Watermelon Mint 33cl' } },
+      { id: 'boi21', name: { fr: 'Lipton Ice Tea 1.5L',                  en: 'Lipton Ice Tea 1.5L' } },
+      { id: 'boi22', name: { fr: '7up Citron 33cl',                      en: '7up Lemon 33cl' } },
+      { id: 'boi23', name: { fr: '7up Cherry 33cl',                      en: '7up Cherry 33cl' } },
+      { id: 'boi24', name: { fr: '7up Mojito 33cl',                      en: '7up Mojito 33cl' } },
+      { id: 'boi25', name: { fr: '7up Citron 1.5L',                      en: '7up Lemon 1.5L' } },
+      { id: 'boi26', name: { fr: 'Tropico 33cl',                         en: 'Tropico 33cl' } },
+      { id: 'boi27', name: { fr: 'Tropico 1.5L',                         en: 'Tropico 1.5L' } },
+      { id: 'boi28', name: { fr: 'Perrier 33cl',                         en: 'Perrier 33cl' } },
+      { id: 'boi29', name: { fr: 'Red Bull 25cl',                        en: 'Red Bull 25cl' } },
+      { id: 'boi31', name: { fr: 'Coffee Delta Bouat',                   en: 'Coffee Delta Bouat' } },
     ]
   },
+
+  // ── 13. EMBALLAGE & PACKAGING ─────────────────────────────────────────────
   {
     id: 'emballage', icon: '📦',
-    label: { fr: 'Emballage & Hygiène', en: 'Packaging & Hygiene' },
+    label: { fr: 'Emballage & Packaging', en: 'Packaging' },
     products: [
-      { id: 'e1', name: 'Fritures Fry Bags 12×9' },
-      { id: 'e2', name: 'Fritures Fry Bags 12×12' },
-      { id: 'e3', name: 'Pots Sauce 30cc + Couvercles ×500' },
-      { id: 'e4', name: 'Pot Salade Kraft Brun + Couvercle 1250ml' },
-      { id: 'e5', name: 'Brown Virgin Kraft Box 260×170×260' },
-      { id: 'e6', name: 'Grand Papier Hamburger 31×38' },
-      { id: 'e7', name: 'Grand Papier Hamburger 28×24' },
-      { id: 'e8', name: 'Boîte Emportée Sandwich' },
-      { id: 'e9', name: 'Grand Rouleau Aluminium' },
-      { id: 'e10', name: 'Perga Ersatz 25×32.5cm Karton 10kg' },
-      { id: 'e11', name: 'Serviette Lovabo ×6' },
-      { id: 'e12', name: 'Carton Serviette Meva Soft' },
-      { id: 'e13', name: 'Papier Toilette' },
-      { id: 'e14', name: 'Sac Bretelles Réutilisables 28+14×48' },
-      { id: 'e15', name: 'Bobine CB ×10' },
-      { id: 'e16', name: 'Bobine Caisse Enregistreuse' },
-      { id: 'e17', name: 'Lemon Paper' },
-      { id: 'e18', name: 'Liquid Vaisselle Mains 5L' },
-      { id: 'e19', name: 'Gants L8/9' },
+      { id: 'e1',  name: { fr: 'Fritures Fry Bags 12×9',              en: 'Fry Bags 12×9' } },
+      { id: 'e2',  name: { fr: 'Fritures Fry Bags 12×12',             en: 'Fry Bags 12×12' } },
+      { id: 'e3',  name: { fr: 'Pots Sauce 30cc + Couvercles ×500',   en: 'Sauce Pots 30cc + Lids ×500' } },
+      { id: 'e4',  name: { fr: 'Pot Salade Kraft Brun 1250ml',        en: 'Brown Kraft Salad Bowl 1250ml' } },
+      { id: 'e5',  name: { fr: 'Brown Virgin Kraft Box 260×170×260',  en: 'Brown Kraft Box 260×170×260' } },
+      { id: 'e6',  name: { fr: 'Grand Papier Hamburger 31×38',        en: 'Burger Wrap Paper 31×38' } },
+      { id: 'e7',  name: { fr: 'Grand Papier Hamburger 28×24',        en: 'Burger Wrap Paper 28×24' } },
+      { id: 'e8',  name: { fr: 'Boîte Sandwich Kraft',                en: 'Kraft Sandwich Box' } },
+      { id: 'e9',  name: { fr: 'Grand Rouleau Aluminium',             en: 'Large Aluminium Roll' } },
+      { id: 'e10', name: { fr: 'Perga Ersatz 25×32.5cm 10kg',         en: 'Perga Ersatz Paper 25×32.5cm 10kg' } },
+      { id: 'e11', name: { fr: 'Lemon Paper',                         en: 'Lemon Paper' } },
+      { id: 'e12', name: { fr: 'Boîte Burger Kraft BBY',              en: 'Kraft Burger Box BBY' } },
+      { id: 'e13', name: { fr: 'Boîte Burger Kraft BBC',              en: 'Kraft Burger Box BBC' } },
+      { id: 'e14', name: { fr: 'Boîte Burger Kraft BB6',              en: 'Kraft Burger Box BB6' } },
+      { id: 'e15', name: { fr: 'Boîte Emporté Plastique 500ml',       en: 'Plastic Takeaway Box 500ml' } },
+      { id: 'e16', name: { fr: 'Roll Film',                           en: 'Cling Film Roll' } },
+      { id: 'e17', name: { fr: 'Sac Poubelle',                        en: 'Bin Bags' } },
+      { id: 'e18', name: { fr: 'Sac Bretelles Réutilisables 28+14×48', en: 'Reusable Handle Bags 28+14×48' } },
+      { id: 'e19', name: { fr: 'Bobine CB ×10',                       en: 'CB Roll ×10' } },
+      { id: 'e20', name: { fr: 'Bobine Caisse Enregistreuse',         en: 'Till Roll' } },
     ]
   },
+
+  // ── 14. VAISSELLE & CROCKERY ──────────────────────────────────────────────
+  {
+    id: 'vaisselle', icon: '🍽️',
+    label: { fr: 'Vaisselle & Crockery', en: 'Crockery & Tableware' },
+    products: [
+      { id: 'v1',  name: { fr: 'Assiette Plates Indien',           en: 'Indian Flat Plates' } },
+      { id: 'v2',  name: { fr: 'Assiette Blanche Plates',          en: 'White Flat Plates' } },
+      { id: 'v3',  name: { fr: 'Assiette Plate Platte',            en: 'Flat Plate (Platte)' } },
+      { id: 'v4',  name: { fr: 'Bouille Salade',                   en: 'Salad Bowl' } },
+      { id: 'v5',  name: { fr: 'Fourchette',                       en: 'Fork' } },
+      { id: 'v6',  name: { fr: 'Cuillère Plastique',               en: 'Plastic Spoon' } },
+      { id: 'v7',  name: { fr: 'Couvercle Plastique',              en: 'Plastic Lid' } },
+      { id: 'v8',  name: { fr: 'Goblet Café 7oz Petit',            en: 'Small Coffee Cup 7oz' } },
+      { id: 'v9',  name: { fr: 'Goblet Café Grande',               en: 'Large Coffee Cup' } },
+      { id: 'v10', name: { fr: 'Boîte Chicken FC0',                en: 'Chicken Box FC0' } },
+      { id: 'v11', name: { fr: 'Boîte Chicken FC1',                en: 'Chicken Box FC1' } },
+      { id: 'v12', name: { fr: 'Boîte Chicken FC4',                en: 'Chicken Box FC4' } },
+    ]
+  },
+
+  // ── 15. HYGIÈNE & ENTRETIEN ───────────────────────────────────────────────
+  {
+    id: 'hygiene', icon: '🧹',
+    label: { fr: 'Hygiène & Entretien', en: 'Hygiene & Cleaning' },
+    products: [
+      { id: 'hy1', name: { fr: 'Serviette Lovabo ×6',      en: 'Lovabo Napkins ×6' } },
+      { id: 'hy2', name: { fr: 'Serviette Meva Soft',      en: 'Meva Soft Napkins' } },
+      { id: 'hy3', name: { fr: 'Papier Toilette Grande Rouleaux', en: 'Large Toilet Paper Rolls' } },
+      { id: 'hy4', name: { fr: 'Liquid Vaisselle 5L',      en: 'Washing Up Liquid 5L' } },
+      { id: 'hy5', name: { fr: 'Gants L8/9',               en: 'Gloves L8/9' } },
+    ]
+  },
+
 ];
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
@@ -783,44 +1043,46 @@ function renderProducts() {
 
   categories.forEach(cat => {
     if (activeCategory !== 'all' && activeCategory !== cat.id) return;
-
-    const filtered = cat.products.filter(p => p.name.toLowerCase().includes(q));
+    const filtered = cat.products.filter(p =>
+      p.name.fr.toLowerCase().includes(q) || p.name.en.toLowerCase().includes(q)
+    );
     if (filtered.length === 0) return;
     anyVisible = true;
 
     html += `<div class="section" id="section-${cat.id}">`;
     html += `<div class="section-title"><span class="section-icon">${cat.icon}</span>${cat.label[currentLang]}</div>`;
-    html += `<div class="product-grid">`;
+    html += `<div class="section-cards"><div class="product-list">`;
     filtered.forEach(p => {
       const qty = quantities[p.id] || 0;
+      const displayName = p.name[currentLang];
       html += `
-        <div class="product-card ${qty > 0 ? 'has-qty' : ''}" id="card-${p.id}">
-          ${qty > 0 ? `<div class="qty-badge">${qty}</div>` : ''}
-          <div class="product-name">${p.name}</div>
+        <div class="product-row ${qty > 0 ? 'has-qty' : ''}" id="row-${p.id}">
+          <div class="product-name">${displayName}</div>
           <div class="qty-row">
             <button class="qty-btn" onclick="changeQty('${p.id}', -1)">−</button>
-            <input class="qty-input" type="number" min="0" value="${qty}" onchange="setQty('${p.id}', this.value)" id="inp-${p.id}">
+            <input class="qty-display ${qty === 0 ? 'zero' : ''}" type="number" min="0" value="${qty}"
+              onchange="setQty('${p.id}', this.value)"
+              onfocus="this.select()"
+              id="inp-${p.id}">
             <button class="qty-btn" onclick="changeQty('${p.id}', 1)">+</button>
           </div>
         </div>`;
     });
-    html += `</div></div>`;
+    html += `</div></div></div>`;
   });
 
   list.innerHTML = html;
-  const empty = document.getElementById('emptyState');
-  empty.style.display = anyVisible ? 'none' : 'block';
+  document.getElementById('emptyState').style.display = anyVisible ? 'none' : 'block';
 }
 
 function updateBar() {
-  const total = Object.values(quantities).reduce((a, b) => a + b, 0);
+  const catalogTotal = Object.values(quantities).reduce((a, b) => a + b, 0);
+  const customTotal  = customItems.reduce((a, i) => a + i.qty, 0);
+  const total = catalogTotal + customTotal;
   document.getElementById('totalItems').textContent = total;
-  document.getElementById('cartCount').textContent = total;
-  const sendBtn = document.getElementById('sendBtn');
-  sendBtn.disabled = total === 0;
-
-  const label = currentLang === 'fr' ? 'articles' : 'items';
-  document.getElementById('summaryLabel').textContent = label + ':';
+  document.getElementById('cartCount').textContent  = total;
+  document.getElementById('sendBtn').disabled = total === 0;
+  document.getElementById('summaryLabel').textContent = (currentLang === 'fr' ? 'articles' : 'items') + ':';
 }
 
 // ─── ACTIONS ──────────────────────────────────────────────────────────────────
@@ -838,10 +1100,12 @@ function setQty(id, val) {
   quantities[id] = newVal;
   if (newVal === 0) delete quantities[id];
   updateBar();
-  // Update card styling without full re-render
-  const card = document.getElementById(`card-${id}`);
-  if (card) {
-    card.className = `product-card ${newVal > 0 ? 'has-qty' : ''}`;
+  const row = document.getElementById(`row-${id}`);
+  const inp = document.getElementById(`inp-${id}`);
+  if (row) row.className = `product-row ${newVal > 0 ? 'has-qty' : ''}`;
+  if (inp) {
+    inp.value = newVal;
+    inp.className = `qty-display ${newVal === 0 ? 'zero' : ''}`;
   }
 }
 
@@ -860,31 +1124,76 @@ function setLang(lang) {
   currentLang = lang;
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   event.target.classList.add('active');
+  // Update custom section UI text
+  document.getElementById('customSectionTitle').textContent =
+    lang === 'fr' ? 'Produit personnalisé' : 'Custom Product';
+  document.getElementById('customName').placeholder =
+    lang === 'fr' ? 'Nom du produit…' : 'Product name…';
   render();
 }
 
 function resetAll() {
-  if (Object.keys(quantities).length === 0) return;
+  const hasAnything = Object.keys(quantities).length > 0 || customItems.length > 0;
+  if (!hasAnything) return;
   if (confirm(currentLang === 'fr' ? 'Réinitialiser toute la commande ?' : 'Reset entire order?')) {
     quantities = {};
+    customItems = [];
+    renderCustomList();
     render();
   }
 }
 
-// ─── ORDER / MODAL ────────────────────────────────────────────────────────────
+// ─── CUSTOM ITEMS ─────────────────────────────────────────────────────────────
+let customItems = []; // [{id, name, qty}]
+let customIdCounter = 0;
+
+function addCustomItem() {
+  const nameEl = document.getElementById('customName');
+  const qtyEl  = document.getElementById('customQty');
+  const name = nameEl.value.trim();
+  const qty  = Math.max(1, parseInt(qtyEl.value) || 1);
+  if (!name) return;
+
+  customItems.push({ id: 'cx_' + (++customIdCounter), name, qty });
+  nameEl.value = '';
+  qtyEl.value  = 1;
+  document.getElementById('customAddBtn').disabled = true;
+  nameEl.focus();
+  renderCustomList();
+  updateBar();
+}
+
+function deleteCustomItem(id) {
+  customItems = customItems.filter(i => i.id !== id);
+  renderCustomList();
+  updateBar();
+}
+
+function renderCustomList() {
+  const el = document.getElementById('customList');
+  if (customItems.length === 0) { el.innerHTML = ''; return; }
+  el.innerHTML = customItems.map(item => `
+    <div class="custom-item-row" id="crow-${item.id}">
+      <div class="custom-item-name">${item.name}</div>
+      <div class="custom-item-qty">×${item.qty}</div>
+      <button class="custom-del-btn" onclick="deleteCustomItem('${item.id}')" title="Supprimer">✕</button>
+    </div>`).join('');
+}
+
+
 function buildMessage() {
   const today = new Date();
   const dateStr = today.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   let msg = `Bonjour,\nLivraison pour demain matin merci 🙏\n\n`;
-
+  // Always use French names in the order (supplier is French-speaking)
   categories.forEach(cat => {
     const items = cat.products.filter(p => quantities[p.id] > 0);
     if (items.length === 0) return;
-    items.forEach(p => {
-      msg += `${quantities[p.id]} ${p.name}\n`;
-    });
+    items.forEach(p => { msg += `${quantities[p.id]} ${p.name.fr}\n`; });
   });
-
+  if (customItems.length > 0) {
+    customItems.forEach(i => { msg += `${i.qty} ${i.name}\n`; });
+  }
   msg += `\n📅 ${dateStr}`;
   return msg;
 }
@@ -892,8 +1201,7 @@ function buildMessage() {
 function openModal() {
   const msg = buildMessage();
   document.getElementById('orderPreview').textContent = msg;
-  const encoded = encodeURIComponent(msg);
-  document.getElementById('waLink').href = `https://wa.me/?text=${encoded}`;
+  document.getElementById('waLink').href = `https://wa.me/?text=${encodeURIComponent(msg)}`;
   document.getElementById('modalOverlay').classList.add('open');
 }
 
@@ -903,7 +1211,6 @@ function closeModal(e) {
   }
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 function toggleTheme() {
   const html = document.documentElement;
   const isDark = html.getAttribute('data-theme') === 'dark';
