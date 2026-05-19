@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Doga's Order</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -199,12 +199,15 @@
     display: flex;
     align-items: center;
     min-height: var(--row-h);
-    padding: 10px 16px;
+    padding: 8px 10px 8px 14px;
     background: var(--surface);
     border-bottom: 1px solid var(--border);
-    gap: 12px;
+    gap: 8px;
     transition: background 0.15s;
     position: relative;
+    /* never let row overflow screen */
+    overflow: hidden;
+    width: 100%;
   }
 
   /* alternate very subtle stripe */
@@ -226,10 +229,14 @@
 
   .product-name {
     flex: 1;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 500;
     line-height: 1.25;
     color: var(--text);
+    /* allow wrapping, never push controls off screen */
+    min-width: 0;
+    word-break: break-word;
+    padding-right: 4px;
   }
 
   /* ── QTY CONTROLS ───────────────────────────────── */
@@ -237,10 +244,10 @@
     display: flex;
     align-items: center;
     gap: 0;
-    flex-shrink: 0;
+    flex-shrink: 0;  /* NEVER shrink — always fully visible */
     background: var(--surface2);
     border: 1.5px solid var(--border);
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
   }
 
@@ -253,50 +260,50 @@
   }
 
   .qty-btn {
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    height: 36px;
     border: none;
     background: transparent;
     color: var(--text);
-    font-size: 1.3rem;
-    font-weight: 300;
+    font-size: 1.2rem;
+    font-weight: 400;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.12s;
     font-family: 'DM Mono', monospace;
-    /* big tap zone */
     touch-action: manipulation;
+    flex-shrink: 0;
   }
   .qty-btn:active { background: var(--accent); color: #111; }
 
   .qty-display {
-    min-width: 36px;
+    width: 32px;
     text-align: center;
     font-family: 'DM Mono', monospace;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: var(--text);
-    /* input styling */
     background: transparent;
     border: none;
     outline: none;
-    padding: 0 2px;
+    padding: 0;
+    flex-shrink: 0;
   }
   .qty-display::-webkit-outer-spin-button,
   .qty-display::-webkit-inner-spin-button { -webkit-appearance: none; }
   .qty-display[type=number] { -moz-appearance: textfield; }
-
-  /* Zero qty — show faded */
   .qty-display.zero { color: var(--muted); }
 
   /* ── SECTION WRAPPER for first/last radius ───────── */
   .section-cards {
-    margin: 0 16px;
+    margin: 0 12px;
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    /* ensure it never overflows viewport */
+    max-width: calc(100vw - 24px);
   }
   [data-theme="dark"] .section-cards {
     box-shadow: none;
